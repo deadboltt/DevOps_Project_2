@@ -29,6 +29,9 @@ spec:
           ports:
             - containerPort: 9418
               name: git
+          volumeMounts:
+            - name: git-repos
+              mountPath: /srv/git
           resources:
             requests:
               cpu: 25m
@@ -36,6 +39,9 @@ spec:
             limits:
               cpu: 150m
               memory: 128Mi
+      volumes:
+        - name: git-repos
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
