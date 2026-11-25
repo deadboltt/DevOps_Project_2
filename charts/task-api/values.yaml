@@ -26,7 +26,8 @@ postgres:
     pullPolicy: IfNotPresent
   database: tasks
   user: postgres
-  password: taskpassword
+  # Provide at install time via --set postgres.password=... or an untracked values-local.yaml
+  password: ""
   storage:
     size: 1Gi
     storageClassName: standard

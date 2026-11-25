@@ -95,7 +95,7 @@ helm upgrade --install monitoring prometheus-community/kube-prometheus-stack `
   --namespace monitoring --create-namespace -f manifests/platform/monitoring-values.yaml --wait
 
 # Deploy Task API + PostgreSQL + ServiceMonitor
-helm upgrade --install task-api ./charts/task-api --wait
+helm upgrade --install task-api ./charts/task-api --set postgres.password=<your-db-password> --wait
 
 # Install ArgoCD & deploy GitOps Application
 helm upgrade --install argocd argo/argo-cd `
@@ -113,7 +113,7 @@ kubectl apply -f gitops/gitops-demo-app.yaml
 | **Nginx Test App** | `http://localhost/` | Baseline Nginx workload |
 | **Helm Demo App** | `http://demo.localtest.me/` | Deployed via `charts/demo-app` |
 | **Task API** | `http://task-api.localtest.me/` | Endpoints: `/healthz`, `/tasks`, `/metrics` |
-| **Grafana** | `http://grafana.localtest.me/` | Local demo credentials configured in `monitoring-values.yaml` |
+| **Grafana** | `http://grafana.localtest.me/` | Retrieve password via `monitoring-grafana` secret |
 | **ArgoCD UI** | `http://argocd.localtest.me/` | Retrieve password via `argocd-initial-admin-secret` |
 | **GitOps Demo App** | `http://gitops-demo.localtest.me/` | Managed automatically by ArgoCD |
 
@@ -124,4 +124,4 @@ Invoke-RestMethod -Uri http://task-api.localtest.me/tasks -Method Post -ContentT
 Invoke-RestMethod http://task-api.localtest.me/tasks
 ```
 
-> **Note:** Default credentials in `charts/task-api/values.yaml` and `manifests/platform/monitoring-values.yaml` are for local Kind development only—replace them before deploying to shared or production environments.
+> **Note:** Credentials are intentionally omitted from tracked Helm values files—supply `postgres.password` via `--set` (or an untracked `values-local.yaml`) and retrieve generated admin secrets from Kubernetes at runtime.

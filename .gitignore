@@ -33,3 +33,7 @@ kubeconfig*
 .env.*
 *.pem
 *.key
+*secret*.yaml
+values-local.yaml
+*.tfvars
+*.tfvars.json

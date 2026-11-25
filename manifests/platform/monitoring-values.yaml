@@ -4,7 +4,7 @@ alertmanager:
 
 grafana:
   enabled: true
-  adminPassword: admin
+  # Admin password is auto-generated in secret "monitoring-grafana" unless set via --set grafana.adminPassword=...
   ingress:
     enabled: true
     ingressClassName: nginx

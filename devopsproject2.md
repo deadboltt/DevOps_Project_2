@@ -127,11 +127,11 @@ Open your browser and navigate to: `http://localhost:8080`
 
 - **Microservice App + PostgreSQL (`task-api`)**:
   - Flask REST API + Prometheus `/metrics` source in [app/app.py](app/app.py) and [app/Dockerfile](app/Dockerfile) (`task-api:1.0.1` loaded into Kind).
-  - Helm chart in [charts/task-api/](charts/task-api/Chart.yaml) with PostgreSQL `16-alpine`, `1Gi` `standard` PVC, `Ingress` (`http://task-api.localtest.me/`), and `ServiceMonitor`.
+  - Helm chart in [charts/task-api/](charts/task-api/Chart.yaml) with PostgreSQL `16-alpine`, `1Gi` `standard` PVC, `Ingress` (`http://task-api.localtest.me/`), and `ServiceMonitor` (pass DB password with `--set postgres.password=<password>`).
   - Test API: `Invoke-RestMethod -Uri http://localhost/tasks -Headers @{ Host = "task-api.localtest.me" }`
 - **Prometheus & Grafana (`monitoring` namespace)**:
   - Installed `prometheus-community/kube-prometheus-stack` with [manifests/platform/monitoring-values.yaml](manifests/platform/monitoring-values.yaml).
-  - Grafana Ingress: `http://grafana.localtest.me/` (user: `admin`, password: `admin`).
+  - Grafana Ingress: `http://grafana.localtest.me/` (retrieve password from the `monitoring-grafana` secret).
 - **ArgoCD & GitOps (`argocd` & `gitops-demo` namespaces)**:
   - Installed `argo/argo-cd` with [manifests/platform/argocd-values.yaml](manifests/platform/argocd-values.yaml) (`http://argocd.localtest.me/`).
   - In-cluster Git daemon: [gitops/git-server.yaml](gitops/git-server.yaml) serving `devops-project-2.git`.

@@ -22,7 +22,7 @@ def get_db_connection():
         port=int(os.environ.get("DB_PORT", "5432")),
         dbname=os.environ.get("DB_NAME", "tasks"),
         user=os.environ.get("DB_USER", "postgres"),
-        password=os.environ.get("DB_PASSWORD", "postgres"),
+        password=os.environ.get("DB_PASSWORD", ""),
         connect_timeout=5,
     )
 
