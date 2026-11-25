@@ -1,0 +1,6 @@
+apiVersion: v2
+name: demo-app
+description: Sample Nginx web application packaged with Helm for Kind Phase 2
+type: application
+version: 0.1.0
+appVersion: "1.27-alpine"

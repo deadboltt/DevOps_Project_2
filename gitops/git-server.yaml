@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: git-server
+  namespace: argocd
+  labels:
+    app: git-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: git-server
+  template:
+    metadata:
+      labels:
+        app: git-server
+    spec:
+      containers:
+        - name: git-daemon
+          image: quay.io/argoproj/argocd:v3.6.3
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p /srv/git
+              git init --bare /srv/git/devops-project-2.git
+              exec git daemon --reuseaddr --base-path=/srv/git --export-all --enable=receive-pack --listen=0.0.0.0 --port=9418 /srv/git
+          ports:
+            - containerPort: 9418
+              name: git
+          resources:
+            requests:
+              cpu: 25m
+              memory: 64Mi
+            limits:
+              cpu: 150m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: git-server
+  namespace: argocd
+  labels:
+    app: git-server
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9418
+      targetPort: git
+      protocol: TCP
+      name: git
+  selector:
+    app: git-server

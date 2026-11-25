@@ -1,0 +1,6 @@
+spec:
+  template:
+    spec:
+      nodeSelector:
+        ingress-ready: "true"
+        kubernetes.io/os: linux
