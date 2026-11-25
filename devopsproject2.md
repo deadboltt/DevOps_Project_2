@@ -123,10 +123,19 @@ Open your browser and navigate to: `http://localhost:8080`
 
 ---
 
-## 8. Next Steps for DevOps / Platform Practice (Phase 3)
-1. **Microservice App + DB**: Deploy a multi-tier service with persistent storage (`local-path` StorageClass).
-2. **GitOps (ArgoCD)**: Install ArgoCD and manage cluster manifests/charts declaratively via Git.
-3. **Observability**: Install Prometheus + Grafana (`kube-prometheus-stack` via Helm) for cluster and app monitoring.
+## 8. Phase 3 Artifacts & Commands (Portfolio / Production Grade)
+
+- **Microservice App + PostgreSQL (`task-api`)**:
+  - Flask REST API + Prometheus `/metrics` source in [app/app.py](app/app.py) and [app/Dockerfile](app/Dockerfile) (`task-api:1.0.1` loaded into Kind).
+  - Helm chart in [charts/task-api/](charts/task-api/Chart.yaml) with PostgreSQL `16-alpine`, `1Gi` `standard` PVC, `Ingress` (`http://task-api.localtest.me/`), and `ServiceMonitor`.
+  - Test API: `Invoke-RestMethod -Uri http://localhost/tasks -Headers @{ Host = "task-api.localtest.me" }`
+- **Prometheus & Grafana (`monitoring` namespace)**:
+  - Installed `prometheus-community/kube-prometheus-stack` with [manifests/platform/monitoring-values.yaml](manifests/platform/monitoring-values.yaml).
+  - Grafana Ingress: `http://grafana.localtest.me/` (user: `admin`, password: `admin`).
+- **ArgoCD & GitOps (`argocd` & `gitops-demo` namespaces)**:
+  - Installed `argo/argo-cd` with [manifests/platform/argocd-values.yaml](manifests/platform/argocd-values.yaml) (`http://argocd.localtest.me/`).
+  - In-cluster Git daemon: [gitops/git-server.yaml](gitops/git-server.yaml) serving `devops-project-2.git`.
+  - Auto-synced ArgoCD `Application`: [gitops/gitops-demo-app.yaml](gitops/gitops-demo-app.yaml) deploying `charts/demo-app` into `gitops-demo` (`http://gitops-demo.localtest.me/`).
 
 ---
 
@@ -136,7 +145,7 @@ Open your browser and navigate to: `http://localhost:8080`
 |---|---|---|---|
 | **Phase 1: Basic Cluster & Pods** | • 3-node Kind cluster<br>• Deploy Nginx test app & port-forward | ~15 mins | ✅ **Completed** |
 | **Phase 2: Platform Core** | • NGINX Ingress controller<br>• Metrics Server + HPA (autoscaling)<br>• Helm chart deployment | ~1-2 hours | ✅ **Completed** |
-| **Phase 3: Portfolio / Production Grade** | • Microservice app + DB<br>• ArgoCD (GitOps)<br>• Prometheus + Grafana monitoring | ~3-4 hours | ⏳ **Ready to start next** |
+| **Phase 3: Portfolio / Production Grade** | • Microservice app + DB<br>• ArgoCD (GitOps)<br>• Prometheus + Grafana monitoring | ~3-4 hours | ✅ **Completed** |
 
-> **Checkpoint**: Phase 2 is complete. NGINX Ingress Controller (`localhost` & `demo.localtest.me`), Metrics Server (`kubectl top` + HPAs), and the `demo-app` Helm release are all running and verified on `dev-cluster`. When ready to resume, begin **Phase 3: Portfolio / Production Grade** (Microservice + DB, ArgoCD GitOps, and Prometheus + Grafana).
+> **Checkpoint**: All 3 phases are complete and verified on `dev-cluster` (`test-nginx`, `demo-app`, `task-api` + PostgreSQL PVC, Prometheus + Grafana, and ArgoCD syncing `gitops-demo-app`). Note: `.localtest.me` subdomains resolve to `127.0.0.1` automatically in browsers/DNS, or can be tested with `Host:` headers against `http://localhost/`.
 
