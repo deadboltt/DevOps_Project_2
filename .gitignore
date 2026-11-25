@@ -1,7 +1,35 @@
+# OS & Editor
 .DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs & Temp files
 *.log
 *.tmp
+*.bak
+*.bundle
+
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 .venv/
 venv/
+env/
+.pytest_cache/
+
+# Helm & Kubernetes local artifacts
+charts/*.tgz
+charts/*/charts/
+*.kubeconfig
+kubeconfig*
+.kube/
+
+# Environment & local secrets
+.env
+.env.*
+*.pem
+*.key
